@@ -5,3 +5,7 @@ __pycache__/
 .streamlit/secrets.toml
 *.pyc
 .DS_Store
+gmail_credentials.json
+credentials.json
+.gmail_token.json
+.local_data/

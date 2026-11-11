@@ -24,6 +24,29 @@ Open the local URL shown by Streamlit, typically `http://localhost:8501`.
 4. In the review tab, check **Human approved** for an invoice, then click **Apply edits and refresh recommendations**.
 5. Change cash and reserve in the sidebar; watch the recommendation statuses change.
 
+## Connect Gmail (local Windows / VS Code)
+
+The **📧 Gmail import** tab can fetch PDF/TXT invoice attachments from a Gmail account. The app uses **read-only OAuth** (`gmail.readonly`), does not send or modify email, and **never initiates payments**. Imports require you to scan and explicitly confirm; there is no unattended inbox monitoring yet.
+
+1. Open [Google Cloud Console](https://console.cloud.google.com/), create or choose a project, and enable **Gmail API** under **APIs & Services → Library**.
+2. Configure **Google Auth Platform → Branding / Audience** (the OAuth consent screen). For a personal demo, use **External** and **Testing**, and add your own Gmail address under **Test users**. Google may display an unverified-app warning for a development app; confirm you trust your own OAuth project before proceeding.
+3. Under **Google Auth Platform → Clients**, create an **OAuth Client ID** with application type **Desktop app**. Download its JSON file and rename it **`gmail_credentials.json`**.
+4. Put `gmail_credentials.json` beside `app.py` (at the project root), **not** inside `invoice_ai/`. Do **not** commit that file to GitHub.
+5. Install dependencies and run from the *outer* project folder:
+
+   ```powershell
+   py -m pip install -r requirements.txt
+   py -m streamlit run app.py
+   ```
+
+6. Open **📧 Gmail import → Connect Gmail**. The Google sign-in window should open in your browser. Grant **read-only** Gmail access. Sign in on the same computer running Streamlit; this desktop OAuth flow is **not appropriate for shared/public cloud hosting**.
+7. Set a Gmail query (default: `has:attachment {filename:pdf filename:txt} newer_than:90d`), select Local parser or OpenAI extraction, and click **Scan Gmail attachments**.
+8. Inspect the extracted information, choose attachments to import, and click **Import selected invoices (unapproved)**. Go to **Review & schedule** to correct errors and authorize routine review actions. Every Gmail invoice is initially **unapproved**.
+
+**Local storage and security:** OAuth tokens go into `.gmail_token.json` and imported invoice records go into `.local_data/gmail_imports.sqlite3`; both are ignored by Git. These local demo files are not encrypted. Protect your computer and never use confidential financial records without permission. Imported Gmail records persist across app restarts and are not reimported on subsequent scans (idempotence is based on Gmail message + attachment IDs). Manual/sample invoice records still live in Streamlit session memory. To disconnect locally, use the tab's **Disconnect** button; you may also revoke the app under your Google Account's third-party connections. You can remove the local database to clear Gmail import history **only if you intentionally want to erase it**.
+
+**Supported formats:** text-based PDFs and UTF-8 TXT attachments, up to 8 MB each. Scanned/image-only PDFs require OCR (not yet implemented). AI extraction sends extracted invoice text to OpenAI only when you select OpenAI mode and configure `OPENAI_API_KEY`; otherwise the local parser stays on your computer. This is a **single-user local prototype** with no production-grade access control, encryption, or accountant audit log.
+
 ## Optional genuine AI extraction
 
 The default mode uses a **regex demo parser**, not AI. To use an actual model for more flexible invoice extraction:
@@ -42,6 +65,8 @@ Select **OpenAI extraction** in the Upload tab. The app submits invoice **text**
 app.py                        Streamlit UI
 invoice_ai/core.py            Validation and deterministic scheduling
 invoice_ai/extract.py         PDF text reading, regex parser, optional LLM extraction
+invoice_ai/gmail_integration.py Read-only OAuth Gmail discovery and attachment retrieval
+invoice_ai/storage.py         Local SQLite persistence for Gmail imports
 sample_data/company.json      Fictional balances, budgets, projected cash events
 sample_data/invoices.json     Fictional invoices for the dashboard
 sample_data/invoices/         Try-it-yourself invoice text
