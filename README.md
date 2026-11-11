@@ -64,7 +64,7 @@ The algorithm uses dated inflows/outflows provided in `company.json`; it conserv
 
 ```bash
 pip install -r requirements-dev.txt
-pytest -q
+python -m pytest -q
 ```
 
 ## Limitations and next steps
