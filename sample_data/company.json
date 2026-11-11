@@ -1,0 +1,9 @@
+{
+  "current_cash": 50000,
+  "minimum_cash_reserve": 20000,
+  "remaining_budgets": {"Operations": 25000, "IT": 10000, "Marketing": 8000},
+  "cash_events": [
+    {"date": "2026-11-20", "type": "inflow", "amount": 25000},
+    {"date": "2026-11-18", "type": "outflow", "amount": 5000}
+  ]
+}

@@ -1,0 +1,8 @@
+[
+  {"invoice_number":"INV-1001","vendor":"ABC Supplies","amount":"15000","due_date":"2026-11-13","department":"Operations","approved":true,"bank_details_changed":false},
+  {"invoice_number":"INV-1002","vendor":"Cloud Services","amount":"6500","due_date":"2026-11-26","department":"IT","approved":true,"bank_details_changed":false},
+  {"invoice_number":"INV-1003","vendor":"Campaign Studio","amount":"9000","due_date":"2026-11-23","department":"Marketing","approved":true,"bank_details_changed":false},
+  {"invoice_number":"INV-1004","vendor":"ABC Supplies","amount":"15000","due_date":"2026-11-13","department":"Operations","approved":true,"bank_details_changed":false},
+  {"invoice_number":"INV-1005","vendor":"Office Systems","amount":"2000","due_date":"2026-11-29","department":"Operations","approved":false,"bank_details_changed":false},
+  {"invoice_number":"INV-1006","vendor":"Network Vendor","amount":"1600","due_date":"2026-11-27","department":"IT","approved":true,"bank_details_changed":true}
+]
